@@ -1,11 +1,25 @@
 {
   "name": "premortem",
-  "version": "1.0.0",
+  "version": "1.1.0",
+  "description": "An open-source prospective hindsight simulation engine utilizing the Gary Klein premortem method powered by Gemini.",
   "type": "module",
+  "main": "./src/index.js",
   "bin": {
-    "premortem": "./index.js"
+    "premortem": "./bin/cli.js"
   },
+  "keywords": [
+    "premortem",
+    "risk-analysis",
+    "gemini",
+    "cli",
+    "project-management"
+  ],
+  "author": "Hicham Outaleb",
+  "license": "MIT",
   "dependencies": {
-    "@google/genai": "*"
+    "@google/genai": "*",
+    "chalk": "^5.3.0",
+    "commander": "^12.1.0",
+    "ora": "^8.0.1"
   }
 }
