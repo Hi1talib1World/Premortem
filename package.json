@@ -6,6 +6,6 @@
     "premortem": "./index.js"
   },
   "dependencies": {
-    "@google/genai": "^0.1.1"
+    "@google/genai": "*"
   }
 }
