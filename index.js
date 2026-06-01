@@ -4,7 +4,8 @@ import { GoogleGenAI } from '@google/genai';
 import fs from 'fs';
 import path from 'path';
 
-const ai = new GoogleGenAI({}); // Assumes GEMINI_API_KEY environment variable is set
+// Explicitly pass the API key from your environment variables
+const ai = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY });
 
 async function runPremortem() {
   const planDescription = process.argv.slice(2).join(' ');
@@ -45,11 +46,28 @@ async function runPremortem() {
       model: 'gemini-2.5-flash',
       contents: prompt,
       config: {
-        responseMimeType: "application/json"
+        // Enforce clean structured object outputs matching our schema definition
+        responseMimeType: "application/json",
+        responseSchema: {
+          type: "OBJECT",
+          properties: {
+            markdownTranscript: { type: "STRING" },
+            htmlReport: { type: "STRING" }
+          },
+          required: ["markdownTranscript", "htmlReport"]
+        }
       }
     });
 
-    const data = JSON.parse(response.text);
+    // Strip out any accidental markdown formatting blocks if added by the model
+    let cleanText = response.text.trim();
+    if (cleanText.startsWith("```json")) {
+      cleanText = cleanText.substring(7, cleanText.length - 3).trim();
+    } else if (cleanText.startsWith("```")) {
+      cleanText = cleanText.substring(3, cleanText.length - 3).trim();
+    }
+
+    const data = JSON.parse(cleanText);
     const timestamp = Date.now();
 
     const reportPath = path.join(process.cwd(), `premortem-report-${timestamp}.html`);
