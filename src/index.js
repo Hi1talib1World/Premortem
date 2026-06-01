@@ -71,8 +71,11 @@ export async function runPremortem(planDescription) {
       cleanText = cleanText.substring(3, cleanText.length - 3).trim();
     }
 
-    const data = JSON.parse(cleanText);
+    const data = JSON.parse(cleanText); // data now expects fields like markdownTranscript, synthesis: { mostLikelyFailure, ... }
     const timestamp = Date.now();
+
+    // Call your template script cleanly
+    const compiledHtml = generateHtmlTemplate(planDescription, data);
 
     const reportFilename = `premortem-report-${timestamp}.html`;
     const transcriptFilename = `premortem-transcript-${timestamp}.md`;
@@ -80,7 +83,7 @@ export async function runPremortem(planDescription) {
     const reportPath = path.join(process.cwd(), reportFilename);
     const transcriptPath = path.join(process.cwd(), transcriptFilename);
 
-    fs.writeFileSync(reportPath, data.htmlReport);
+    fs.writeFileSync(reportPath, compiledHtml);
     fs.writeFileSync(transcriptPath, data.markdownTranscript);
 
     spinner.succeed(chalk.bold.green('Prospective Hindsight Matrix Compiled Successfully!'));
