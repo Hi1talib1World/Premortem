@@ -4,7 +4,7 @@ import { GoogleGenAI } from '@google/genai';
 import fs from 'fs';
 import path from 'path';
 
-const ai = new GoogleGenAI(); // Assumes GEMINI_API_KEY environment variable is set
+const ai = new GoogleGenAI({}); // Assumes GEMINI_API_KEY environment variable is set
 
 async function runPremortem() {
   const planDescription = process.argv.slice(2).join(' ');
