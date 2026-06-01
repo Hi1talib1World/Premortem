@@ -1,4 +1,5 @@
 import { GoogleGenAI } from '@google/genai';
+import { generateHtmlTemplate } from './templates.js';
 import fs from 'fs';
 import path from 'path';
 import chalk from 'chalk';
