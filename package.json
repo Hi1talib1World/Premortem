@@ -1,0 +1,11 @@
+{
+  "name": "premortem",
+  "version": "1.0.0",
+  "type": "module",
+  "bin": {
+    "premortem": "./index.js"
+  },
+  "dependencies": {
+    "@google/genai": "^0.1.1"
+  }
+}
