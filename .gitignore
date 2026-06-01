@@ -1,0 +1,5 @@
+node_modules/
+npm-debug.log*
+premortem-report-*.html
+premortem-transcript-*.md
+.env
