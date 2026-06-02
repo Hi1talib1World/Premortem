@@ -2,6 +2,42 @@
 
 Run a premortem on any plan, launch, product, hire, strategy, or decision. Assumes it already failed 6 months from now and works backward to find every reason why. Produces a revised plan with blind spots exposed.
 
+## Getting Started
+
+1. Install dependencies:
+
+```powershell
+npm install
+```
+
+2. Set your Gemini API key:
+
+```powershell
+$env:GEMINI_API_KEY="your_key"
+```
+
+3. Run the CLI:
+
+- With a plan:
+
+```powershell
+premortem "Describe the project, goal, audience, risks, and timeline."
+```
+
+- Without a plan:
+
+```powershell
+premortem
+```
+
+When no plan text is supplied, the tool uses a default cleaned concept and runs automatically.
+
+This produces:
+
+- `premortem-report-[timestamp].html`
+- `premortem-transcript-[timestamp].md`
+- `premortem-report-[timestamp].txt`
+
 ## What is a Premortem?
 
 A premortem is the opposite of a postmortem. Instead of figuring out what went wrong after something fails, you imagine it already failed and figure out why *before* you start.
@@ -81,7 +117,11 @@ Save full transcript as `premortem-transcript-[timestamp].md` for reference.
 
 ## Output Format
 
-Every premortem session produces two files:
+Every premortem session produces three files:
+
+- `premortem-report-[timestamp].html`
+- `premortem-transcript-[timestamp].md`
+- `premortem-report-[timestamp].txt`
 
 Plus a concise chat summary: most likely failure, hidden assumption, and single most important revision (3 sentences max).
 
