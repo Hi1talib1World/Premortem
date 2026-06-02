@@ -5,6 +5,22 @@ import path from 'path';
 import chalk from 'chalk';
 import ora from 'ora';
 
+function markdownToPlainText(markdown) {
+  return markdown
+    .replace(/```[\s\S]*?```/g, '')
+    .replace(/(^|\n)#+\s*/g, '$1')
+    .replace(/\*\*(.*?)\*\*/g, '$1')
+    .replace(/\*(.*?)\*/g, '$1')
+    .replace(/`([^`]+)`/g, '$1')
+    .replace(/!\[.*?\]\(.*?\)/g, '')
+    .replace(/\[([^\]]+)\]\([^\)]+\)/g, '$1')
+    .replace(/[-*_]{3,}/g, '')
+    .replace(/> ?/g, '')
+    .replace(/\r\n/g, '\n')
+    .replace(/\n{3,}/g, '\n\n')
+    .trim();
+}
+
 export async function runPremortem(planDescription) {
   if (!process.env.GEMINI_API_KEY) {
     console.error(chalk.red('\n✖ Error: GEMINI_API_KEY environment variable is not defined.'));
@@ -82,15 +98,19 @@ export async function runPremortem(planDescription) {
     
     const reportPath = path.join(process.cwd(), reportFilename);
     const transcriptPath = path.join(process.cwd(), transcriptFilename);
+    const textReportFilename = `premortem-report-${timestamp}.txt`;
+    const textReportPath = path.join(process.cwd(), textReportFilename);
 
     fs.writeFileSync(reportPath, compiledHtml);
     fs.writeFileSync(transcriptPath, data.markdownTranscript);
+    fs.writeFileSync(textReportPath, markdownToPlainText(data.markdownTranscript));
 
     spinner.succeed(chalk.bold.green('Prospective Hindsight Matrix Compiled Successfully!'));
     
     console.log('\n' + chalk.bgGreen.black.bold(' OUTPUT GENERATED '));
     console.log(`${chalk.blue('📊 Interactive Risk Dashboard:')} ${chalk.underline(reportPath)}`);
-    console.log(`${chalk.magenta('📝 Full Strategic Transcript:')}  ${chalk.underline(transcriptPath)}\n`);
+    console.log(`${chalk.magenta('📝 Full Strategic Transcript:')}  ${chalk.underline(transcriptPath)}`);
+    console.log(`${chalk.yellow('📄 Plain Text Report:')} ${chalk.underline(textReportPath)}\n`);
 
   } catch (error) {
     spinner.fail(chalk.bold.red('Execution Vector Interrupted.'));
